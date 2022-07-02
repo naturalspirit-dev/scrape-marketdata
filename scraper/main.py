@@ -21,27 +21,30 @@ def waitForOpen():
 
 auth()
 dataHarvester = HarvestData()
-processor = Processor()
-currEst = int(str(datetime.datetime.now(pytz.timezone('US/Eastern')).time()).split(':')[0])
+currEst = datetime.datetime.now(pytz.timezone('US/Eastern'))
+currEstHour = int(str(currEst.time()).split(':')[0])
 
-while(True):
-    currEst = int(str(datetime.datetime.now(pytz.timezone('US/Eastern')).time()).split(':')[0])
-    if (datetime.datetime.now().weekday() == 5 and currEst > 16): #if friday wait 48 hours
-        print("It's Friday - waiting till market open")
-        time.sleep(172100)
-    if (datetime.datetime.now().weekday() == 6): #if saturday wait 24 hours
-        print("It's Saturday - waiting till market open")
-        time.sleep(86100)
-    waitForOpen()
-    if (not rs.get_market_today_hours('XNYS')['is_open']):
-        print("Market is currently closed - waiting 24 hours")
-        time.sleep(86400)
-    else:
-        print("--- Running data harvester ", datetime.datetime.now(), "---")
-        while (datetime.datetime.now(pytz.timezone("US/Eastern")).time() < datetime.time(16, 20)): ##until market closes (EST), run bot every 5 minute
-            dataHarvester.harvestDailyDataToDB("spy")
-            dataHarvester.harvestDailyDataToDB("aapl")
-            dataHarvester.harvestDailyDataToDB("meta")
-            dataHarvester.harvestDailyDataToDB("amc")
-            time.sleep(300)
-        print("--- Finished running data harvester ---")
+if (currEst.weekday() == 5 or currEst.weekday() == 6):
+    print("It's the weekend - exiting...")
+    exit()
+
+waitForOpen()
+if (not rs.get_market_today_hours('XNYS')['is_open']):
+    print("Market is currently closed - exiting...")
+    exit()
+else:
+    print("--- Running data harvester ", datetime.datetime.now(), "---")
+    while (currEst.time() < datetime.time(16, 20)): ##until market closes (EST), run bot every 5 minute
+        dataHarvester.harvestDailyDataToDB("spy")
+        dataHarvester.harvestDailyDataToDB("aapl")
+        dataHarvester.harvestDailyDataToDB("meta")
+        dataHarvester.harvestDailyDataToDB("amc")
+        dataHarvester.harvestDailyDataToDB("nvda")
+        dataHarvester.harvestDailyDataToDB("tsla")
+        dataHarvester.harvestDailyDataToDB("amzn")
+        dataHarvester.harvestDailyDataToDB("goog")
+        dataHarvester.harvestDailyDataToDB("mrna")
+        dataHarvester.harvestDailyDataToDB("twtr")
+        dataHarvester.harvestDailyDataToDB("msft")
+        time.sleep(300)
+    print("--- Finished running data harvester ---")
