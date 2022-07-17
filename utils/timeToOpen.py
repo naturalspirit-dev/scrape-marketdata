@@ -2,6 +2,8 @@ import datetime
 from time import timezone
 import pytz
 from dateutil.relativedelta import relativedelta
+from errors.scraperError import ScraperError
+from logs.logger import logMsg
 
 def timeToOpen():
   if (timeZoneToOpen(False) > 86400):
@@ -20,8 +22,10 @@ def timeZoneToOpen(displaytime=True):
   timeTillOpen = relativedelta(nextOpen, currEst.date())
 
   if(timeTillOpen.days > 1 or timeTillOpen.days < 0):
-    print('time till open failure')
-    return -1
+    err = ScraperError("time till open error", "timeToOpen.py", "on line 25")
+    logMsg(str(err), "err")
+    logMsg("", "final")
+    raise err
   if (timeTillOpen.days == 1):
     currMidnight = datetime.datetime.combine(currEst.date(), datetime.time(0,0,0))
     timeTillMidnight = est.localize(currMidnight) - currEst
@@ -31,7 +35,7 @@ def timeZoneToOpen(displaytime=True):
   totalSeconds += (timeTillOpen.minutes * 60)
   remaining = str(datetime.timedelta(seconds=totalSeconds)).split(':')
   if(displaytime):
-    print("Time till 3:30am HST / 9:30AM EST | ", remaining[0]+' Hours', remaining[1]+' Minutes', remaining[2]+' Seconds')
+    print("--- Time till 3:30am HST / 9:30AM EST | ", remaining[0]+' Hours', remaining[1]+' Minutes', remaining[2]+' Seconds')
 
   return totalSeconds
 
@@ -62,6 +66,6 @@ def timeAmbigToOpen(displaytime=True):
   difference_seconds = (difference_hours * 3600) + (difference_minutes * 60)
 
   if(displaytime):
-    print("Time till 3:30am: ", difference_hours, " hours and ", difference_minutes, " minutes")
+    print("--- Time till 3:30am: ", difference_hours, " hours and ", difference_minutes, " minutes")
 
   return abs(difference_seconds)

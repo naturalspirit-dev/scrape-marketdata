@@ -3,6 +3,9 @@ import robin_stocks.robinhood as rs
 import os
 import csv
 from database.interface import getCollection
+from logs.logger import logMsg
+
+
 class HarvestData():
 
     def validateLocation(self,stock, path, date, fieldNames):
@@ -40,7 +43,7 @@ class HarvestData():
                 updatedRecord = todayRecord['MarketData']
                 updatedRecord.append(marketData)
                 updated = collection.find_one_and_replace({'Date': date}, {'Date': date, 'MarketData': updatedRecord})
-                if not updated: print('failure to update record: ', date, time)
+                if not updated: logMsg('failure to update record for f{date} f{time}: ', "err")
         except:
             return
 
@@ -129,7 +132,7 @@ class HarvestData():
                 collection.insert_one(newRecord)
             else:
                 updated = collection.find_one_and_replace({'Date': date}, newRecord)
-                if not updated: print('failure to update record: ', date, time)
+                if not updated: logMsg('failure to update record for f{date} f{time}: ', "err")
         except:
             return
 
@@ -139,12 +142,10 @@ class HarvestData():
         path = f'../../data/daily/{year}/{stock.upper()}/'
         fieldNames = ['Date','Time','Open','High','Low','Close','Volume']
         self.validateLocation(stock, path, date, fieldNames)
-        print(data)
         date = str(data['begins_at']).split('T')[0]
         time = str(data['begins_at']).split('T')[1]
         with open(path + f'{date}_{stock.upper()}.csv', 'a', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, delimiter=',', fieldnames=fieldNames)
-            print("writing: ", time)
             writer.writerow({
                 'Date': date, 
                 'Time': time, 

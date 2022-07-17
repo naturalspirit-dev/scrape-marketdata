@@ -19,8 +19,7 @@ def auth():
 
   login = rs.login(USER, PASS)
   if(login['expires_in'] > 0):
-    print("login successful----")
+    return True
   elif(login['expires_in'] < 0):
-    print("login unsuccessful :(")
-    return -1
+    return False
     

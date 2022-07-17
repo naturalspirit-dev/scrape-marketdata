@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+from logs.logger import logMsg
+from errors.scraperError import ScraperError
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -14,7 +16,10 @@ def getDatabase():
     try:
         client.admin.command('ping')
     except ConnectionFailure:
-        print("Server not available")
+        err = ScraperError("Mongo error", "connect.py", "pymongo login unsuccessful")
+        logMsg(str(err), "err")
+        logMsg("", "final")
+        raise err
     return client
     
 # This is added so that many files can reuse the function get_database()
