@@ -40,12 +40,14 @@ def run():
 
     if (currEst.weekday() == 5 or currEst.weekday() == 6):
         logMsg("It's the weekend - exiting...", "marketclosed")
+        logMsg("", "final")
         return
 
     waitForOpen()
 
     if (not rs.get_market_today_hours('XNYS')['is_open']):
         logMsg("Market is currently closed - exiting...", "marketclosed")
+        logMsg("", "final")
         return
     else:
         while (currEst.time() < datetime.time(16, 20, 0, 0, pytz.timezone('US/Eastern'))): ##until market closes (EST), run bot every 5 minute

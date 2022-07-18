@@ -1,0 +1,19 @@
+-------------
+--- Running data harvester 
+--- 2022-07-17
+--- Login successful
+MARKET CLOSED It's the weekend - exiting...
+-------------
+--- Running data harvester 
+--- 2022-07-17
+--- Login successful
+MARKET CLOSED It's the weekend - exiting...
+-------------
+
+-------------
+--- Running data harvester 
+--- 2022-07-17
+--- Login successful
+MARKET CLOSED It's the weekend - exiting...
+-------------
+
