@@ -11,7 +11,7 @@ envars = basepath.cwd() / '.env'
 load_dotenv(envars)
 
 def getDatabase():
-    CONNECTION_STRING = f"mongodb+srv://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@cluster0.hcvfmxl.mongodb.net/test?retryWrites=true&w=majority"
+    CONNECTION_STRING = f"mongodb+srv://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@cluster0.hcvfmxl.mongodb.net/?retryWrites=true&w=majority"
     client = MongoClient(CONNECTION_STRING)
     try:
         client.admin.command('ping')

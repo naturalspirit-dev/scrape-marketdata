@@ -1,3 +1,4 @@
+import logging
 import os
 import datetime
 date = str(datetime.datetime.now().date())
@@ -21,3 +22,4 @@ def logMsg(msg, type):
             txt.write(f'ERROR : {msg}\n')
         elif(type == 'final'):
             txt.write('-------------\n\n')
+

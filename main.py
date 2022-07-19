@@ -58,7 +58,6 @@ def run():
         logMsg("", "final")
         return
 
-print("RUNNING MAIN FILE")
 try:
     run()
 except:
